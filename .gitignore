@@ -1,0 +1,8 @@
+/client/.next
+/client/node_modules
+
+/server/__pycache__
+/server/GoogleNews-vectors-negative300.bin
+/server/wiki.hi.vec
+/server/wiki.hi.bin
+/server/pytorch_model.bin
