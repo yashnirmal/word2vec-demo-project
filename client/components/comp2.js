@@ -24,7 +24,7 @@ export default function Comp2({model}){
 	return (
 		<div className="w-full h-[400px] box flex flex-col gap-4 p-4">
 			<h2 className="text-3xl font-semibold">Similarity between 2 Word</h2>
-			<p>Given two words, this demo gives the similarity value between 1 and -1.</p>
+			<p>Given two words, this demo gives the similarity value between 0 and 1.</p>
 
 			<div className="w-full">
 				<div className="flex gap-4">
