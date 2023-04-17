@@ -83,22 +83,6 @@ def nearest_words():
     return jsonify(data)
 
 
-@app.route('/word_analogy',methods=['GET'])
-def word_analogy():
-    word1 = request.args.get('word1')
-    word2 = request.args.get('word2')
-    word3 = request.args.get('word3')
-
-    print(word1,word2,word3)
-    analogy_word = model.analogy(word1,word2,word3)
-
-    data = {
-        "status":'ok',
-        "result":analogy_word
-    }
-
-    return jsonify(data)
-
 
 @app.route('/multi_words',methods=['POST'])
 def multi_words():

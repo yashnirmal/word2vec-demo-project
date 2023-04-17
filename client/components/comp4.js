@@ -1,104 +1,39 @@
-import { use, useRef, useState } from "react"
-import Tsne from './tsne'
+import { useState } from "react"
 
-// how to plot the tsne graph for the word embeddings that i get from a word2vec model foir multiple words using javascipt
+export default function Comp3({model}){
 
-export default function Comp4({model}){
+	const [word1,setWord1] = useState("")
+	const [word2,setWord2] = useState("")
+	const [word3,setWord3] = useState("")
 
-	const inputRef = useRef()
-	const [loading,setLoading] = useState("")
-	const [open,setOpen] = useState(false)
-	const [wordClusters, setWordClusters] = useState([]);
-	const [embeddingClusters, setEmbeddingClusters] = useState([]);
-
-	function multiSimilarWords(){
-
-		setLoading("Loading...")
-
-		console.log("model sent",model)
-		const words = inputRef.current.value.split(",")
-		console.log(words)
-
-		const reqOptions = {
-			method:"POST",
-			headers: {
-				'Content-Type':'application/json'
-			},
-			body:JSON.stringify({
-				words:words,
-				model:model
-			})
-		}
-
-		fetch(`http://127.0.0.1:5000/multi_words`,reqOptions)
+	function findAnalogousWord(){
+		fetch(`http://127.0.0.1:5000/word_analogy?model=${model}&word1=${word1}&word2=${word2}&word3=${word3}`)
 		.then(res=>res.json())
 		.then(data=>{
 			console.log(data)
 			if(data.status=="ok"){
-				console.log(data.result)
-				let tempWordClusters = []
-				data.result.word_clusters.forEach(wc=>{
-					wc.forEach(el=>{
-						tempWordClusters.push(el)
-					})
-				})
-				console.log(tempWordClusters)
-				setWordClusters(tempWordClusters);
-        		setEmbeddingClusters(data.result.embedding_clusters);
+				setResult(data.result)
 			}
-			setLoading("Loaded!")
 		})
 		.catch((err)=>{
 			console.log("Server error! ",err)
-			setLoading("Error occured!")
 		})
 	}
 
-	const scatterData = [];
-
-	if (embeddingClusters.length > 0) {
-
-		// wordClusters.forEach((word_clus,i)=>{
-		// 	word_clus.forEach((word,j)=>{
-
-		// 	})
-		// })
-
-		for (let i = 0; i < wordClusters.length; i++) {
-			const clusterData = [];
-			for (let j = 0; j < wordClusters[i].length; j++) {
-			  const word = wordClusters[i][j];
-			  const embedding = embeddingClusters[i][j];
-			  clusterData.push({ x: embedding, word: word });
-			}
-			scatterData.push(clusterData);
-		  }
-	}
 
 	return (
 		<div className="w-full h-[400px] box flex flex-col gap-4 p-4">
-			<h2 className="text-3xl font-semibold">Graph Visualization</h2>
-			<p>Write the multiple words separated by comma</p>
+			<h2 className="text-3xl font-semibold">Word analogy</h2>
+			<p>This demo computes word analogy: the first word is to the second word like the third word is to which word? Try for example air - bird - water which would expect to return fish</p>
 
 			<div className="w-full">
-				<div className="flex gap-4">
-					<input ref={inputRef} className="flex-grow" type="text" placeholder="Example car,water,sky etc." />
-					<button onClick={multiSimilarWords}>Submit</button>
+				<div className="flex flex-wrap gap-4">
+					<input className="flex-grow" type="text" placeholder="Enter a word" value={word1} onChange={(e)=>setWord1(e.target.value)} />
+					<input className="flex-grow" type="text" placeholder="Enter a word" value={word2} onChange={(e)=>setWord2(e.target.value)} />
+					<input className="flex-grow" type="text" placeholder="Enter a word" value={word3} onChange={(e)=>setWord3(e.target.value)} />
+					<button onClick={findAnalogousWord}>Submit</button>
 				</div>
 			</div>
-
-			{
-				loading&&<div>
-					{loading}
-				</div>
-			}
-
-			<div className="cursor-pointer underline font-semibold" onClick={()=>setOpen(true)}>
-				Show graph
-			</div>
-
-			{open && <Tsne setOpen={setOpen} embeddingClusters={embeddingClusters} wordClusters={wordClusters} />}
-
 		</div>
-	)
+	) 
 }

@@ -1,9 +1,8 @@
 import Head from 'next/head'
-import { use, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Comp1 from "../components/comp1"
 import Comp2 from "../components/comp2"
 import Comp3 from "../components/comp3"
-import Comp4 from "../components/comp4"
 import Navbar from "../components/navbar"
 import Footer from "../components/footer"
 import Hero from "../components/hero"
@@ -41,7 +40,6 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-8">
             <Comp1 model={model} />
             <Comp2 model={model} />
-            <Comp4 model={model} />
             <Comp3 model={model} />
           </div>
         </div>

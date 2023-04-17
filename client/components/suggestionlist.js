@@ -19,7 +19,7 @@ export default function SuggestionList({word,setWord,model}){
 	}
 
     useEffect(()=>{
-        findSuggestionList()
+        // findSuggestionList()
     },[word])
 
     return (
